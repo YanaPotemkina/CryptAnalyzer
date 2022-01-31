@@ -8,6 +8,7 @@ import java.nio.file.Path;
 public class Analyzer {
 
     private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,!:;?-%0123456789";
+    private static final String INPUT = "Введите полный путь к файлу:";
     private static final BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
     private static final String START_MESSAGE = """
             Введите число для выбора режима программы:
@@ -38,7 +39,7 @@ public class Analyzer {
     }
 
     private static void encrypt() throws IOException {
-        System.out.println("Введите полный путь к файлу:");
+        System.out.println(INPUT);
         String filePath = READER.readLine();
         String userText = getFile(filePath);
         System.out.println("Введите ключ:");
@@ -63,7 +64,7 @@ public class Analyzer {
     }
 
     private static void decrypt() throws IOException {
-        System.out.println("Введите полный путь к файлу:");
+        System.out.println(INPUT);
         String filePath = READER.readLine();
         String userText = getFile(filePath);
         System.out.println("Введите ключ:");
@@ -88,7 +89,7 @@ public class Analyzer {
     }
 
     private static void brutForce() throws IOException {
-        System.out.println("Введите путь к файлу:");
+        System.out.println(INPUT);
         String filePath = READER.readLine();
         String userText = getFile(filePath);
         for (int key = 0; key < ALPHABET.length(); key++) {
@@ -113,7 +114,7 @@ public class Analyzer {
                 comma++;
             } else if (chars[i] == '!' && chars[i + 1] == ' ') {
                 exclamation++;
-            } else if (chars[i] == ' ' && chars[i + 1] == 'Ъ' || chars[i] == ' ' && chars[i + 1] == 'Ь') {
+            } else if ((chars[i] == ' ' && chars[i + 1] == 'Ъ') || (chars[i] == ' ' && chars[i + 1] == 'Ь')) {
                 return false;
             }
             if (points > 20 && comma > 30 && exclamation > 10) {
@@ -141,7 +142,7 @@ public class Analyzer {
             String fileAfterDot = filePath.substring(dotIndex);
             String newFile = fileBeforeDot + suffix + fileAfterDot;
             Files.writeString(Path.of(newFile), encryptText);
-            System.out.println("Программа выполнена успешна!\nНазвание файла: " + fileBeforeDot + suffix + fileAfterDot + "\n");
+            System.out.println("Программа выполнена успешна!\nПуть к новому файлу: " + fileBeforeDot + suffix + fileAfterDot + "\n");
         } catch (IOException e) {
             System.out.println("Ошибка записи файла.\n");
         }
