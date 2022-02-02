@@ -9,12 +9,10 @@ import java.util.Collections;
 
 
 public class Analyzer {
-
-    public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,!:;?%0123456789";
-    public static final ArrayList<Character> CRYPTO_CHARACTERS = new ArrayList<>();
-    public static final ArrayList<Character> CRYPTO_CHARACTERS_WITH_KEY = new ArrayList<>();
+    public static final String CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,!:;?%0123456789";
+    public static final ArrayList<Character> ALPHABET = new ArrayList<>();
+    public static final ArrayList<Character> CRYPTO_ALPHABET = new ArrayList<>();
     private static final String INPUT = "Введите полный путь к файлу:";
-    public static final ArrayList<Character> NEW_CRYPTO_TEXT = new ArrayList<>();
     private static final BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
     private static final String START_MESSAGE = """
             Введите число для выбора режима программы:
@@ -51,10 +49,10 @@ public class Analyzer {
         String filePath = READER.readLine();
         System.out.println("Введите ключ:");
         int key = Integer.parseInt(READER.readLine());
-        Collections.rotate(CRYPTO_CHARACTERS_WITH_KEY, -key);
+        Collections.rotate(CRYPTO_ALPHABET, -key);
         StringBuilder cryptText = crypt(filePath);
         writeNewTextToFile(cryptText, filePath, "_encrypted");
-        CRYPTO_CHARACTERS_WITH_KEY.clear();
+        CRYPTO_ALPHABET.clear();
     }
 
 
@@ -64,10 +62,10 @@ public class Analyzer {
         String filePath = READER.readLine();
         System.out.println("Введите ключ:");
         int key = Integer.parseInt(READER.readLine());
-        Collections.rotate(CRYPTO_CHARACTERS_WITH_KEY, key);
+        Collections.rotate(CRYPTO_ALPHABET, key);
         StringBuilder cryptText = crypt(filePath);
         writeNewTextToFile(cryptText, filePath, "_decrypted");
-        CRYPTO_CHARACTERS_WITH_KEY.clear();
+        CRYPTO_ALPHABET.clear();
     }
 
 
@@ -78,11 +76,11 @@ public class Analyzer {
             while ((line = br.readLine()) != null) {
                 char[] chars = line.toCharArray();
                 for (char aChar : chars) {
-                    int cryptoIndex = CRYPTO_CHARACTERS.indexOf(aChar);
+                    int cryptoIndex = ALPHABET.indexOf(aChar);
                     if (cryptoIndex == -1) {
                         encryptText.append(aChar);
                     } else {
-                        char messageIndex = CRYPTO_CHARACTERS_WITH_KEY.get(cryptoIndex);
+                        char messageIndex = CRYPTO_ALPHABET.get(cryptoIndex);
                         encryptText.append(messageIndex);
                     }
                 }
@@ -96,8 +94,8 @@ public class Analyzer {
         createCryptoAlphabet();
         System.out.println(INPUT);
         String filePath = READER.readLine();
-        for (int key = 0; key < ALPHABET.length(); key++) {
-            Collections.rotate(CRYPTO_CHARACTERS_WITH_KEY, 1);
+        for (int key = 0; key < CHARS.length(); key++) {
+            Collections.rotate(CRYPTO_ALPHABET, 1);
             StringBuilder decryptedText = crypt(filePath);
             boolean isValid = isValidText(decryptedText);
             if (isValid) {
@@ -105,7 +103,7 @@ public class Analyzer {
                 break;
             }
         }
-        CRYPTO_CHARACTERS_WITH_KEY.clear();
+        CRYPTO_ALPHABET.clear();
     }
 
     private static boolean isValidText(StringBuilder decryptedText) {
@@ -133,14 +131,14 @@ public class Analyzer {
     }
 
     public static void createAlphabet() {
-        for (int i = 0; i < ALPHABET.length(); i++) {
-            CRYPTO_CHARACTERS.add(i, ALPHABET.charAt(i));
+        for (int i = 0; i < CHARS.length(); i++) {
+            ALPHABET.add(i, CHARS.charAt(i));
         }
     }
 
     public static void createCryptoAlphabet() {
-        for (int i = 0; i < CRYPTO_CHARACTERS.size(); i++) {
-            CRYPTO_CHARACTERS_WITH_KEY.add(i, CRYPTO_CHARACTERS.get(i));
+        for (int i = 0; i < ALPHABET.size(); i++) {
+            CRYPTO_ALPHABET.add(i, ALPHABET.get(i));
         }
     }
 }
